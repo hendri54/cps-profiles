@@ -1,0 +1,529 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\input{/Users/lutz/Dropbox/data/software/lyx/paper_preamble.tex}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks true
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Constructing Age-earnings Profiles From CPS Data
+\end_layout
+
+\begin_layout Author
+Lutz Hendricks
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+University of North Carolina, Chapel Hill; lutz@lhendricks.org
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+today
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+thispagestyle{empty}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Abstract
+This document describes the construction of age-earnings profiles from CPS
+ data.
+ It serves as documentation for the data used in a number of my papers.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+This document describes the construction of age-earnings or age-wage profiles
+ from March CPS data.
+ The same procedures are used in a number of my papers.
+ Documenting them in one place avoids duplication.
+\end_layout
+
+\begin_layout Standard
+Details, such as the age ranges or cohorts included in the sample, differ
+ across papers.
+ This document therefore replaces specific values of the parameters governing
+ these choices with variables.
+ The values of these variables are specified in the papers that use the
+ data.
+\end_layout
+
+\begin_layout Section
+Sample
+\end_layout
+
+\begin_layout Standard
+The data are taken from the March Current Population Survey 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "ipums_cps"
+
+\end_inset
+
+.
+ The data waves used and the sampling criterisa (age and birth year ranges,
+ etc.) vary across applications and are documented in the papers that use
+ the data.
+ See 
+\family typewriter
+import_cpsearn.filter
+\family default
+ and 
+\family typewriter
+import_cpsearn.import
+\family default
+ (this is a pointer to the program file that executes this step).
+\end_layout
+
+\begin_layout Section
+Individual Variables
+\end_layout
+
+\begin_layout Standard
+The construction of individual variables is based on 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Bowlus:2012"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Dollar values are deflated using the Consumer Price Index (all items, U.S.
+ city average, series Id: CUUR0000SA0; see bls.gov).
+\end_layout
+
+\begin_layout Paragraph
+Schooling:
+\end_layout
+
+\begin_layout Standard
+Individuals are assigned one of 4 schooling levels: high school dropout
+ (HSD), high school graduate (HSG), college dropout (CD), college graduate
+ (CG).
+ See 
+\family typewriter
+var_cpsearn.school_create
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+As discussed in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "jaeger1997"
+
+\end_inset
+
+, the coding of schooling changes in 1991.
+ I use the coding scheme proposed in his tables 2 and 7 to recode HIGRADE
+ and EDUC99 into the highest degree completed and the highest grade completed.
+\end_layout
+
+\begin_layout Standard
+Prior to 1992, we have information about completed years of schooling (variable
+ higrade).
+ During this period, we define high school graduates as those completing
+ 12 years of schooling (higrade=150), college dropouts as those with less
+ than four years of college (151,...,181), and college graduates as those with
+ 16+ years of schooling (190 and above).
+ Beginning in 1992, the CPS reports education according to the highest degree
+ attained (educ99).
+ For this period, we define high school graduates as those with a high school
+ diploma or GED (educ99=10), college dropouts as those with "some college
+ no degree," "associate degree/occupational program," "associate degree/academic
+ program" (11,12,13,14).
+ College graduates are those with a bachelors, masters, professional, or
+ doctorate degree (15,16,17,18).
+\end_layout
+
+\begin_layout Paragraph
+Hours worked:
+\end_layout
+
+\begin_layout Standard
+Hours worked per year are defined as the product of hours worked last week
+ and weeks worked last year.
+ 
+\end_layout
+
+\begin_layout Standard
+Weeks worked per year are intervalled until 1975 (WKSWORK2).
+ For consistency, I use the intervalled variable for all years.
+ Each interval is assigned the interval midpoint.
+\end_layout
+
+\begin_layout Standard
+Until 1975, hours worked per week are only available for the previous week
+ (HRSWORK).
+ For consistency, I use this variable for all years.
+\end_layout
+
+\begin_layout Paragraph
+Income variables:
+\end_layout
+
+\begin_layout Standard
+Labor 
+\series bold
+earnings
+\series default
+ are defined as the sum of wage and salary incomes (INCWAGE).
+ In some cases, I consider a broad measure of labor income that includes
+ a fraction of self-employment income (INCBUS).
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Wages
+\series default
+ are defined as labor earnings divided by weeks worked.
+ 
+\end_layout
+
+\begin_layout Standard
+I construct 2 versions of earnings and wages.
+ For the 
+\series bold
+full sample
+\series default
+, I retain all observations with non-negative earnings or wages.
+ For the 
+\series bold
+wage sample
+\series default
+, I drop individuals who work fewer than a minimum number of weeks or whose
+ wages are outside a fixed range around the median (presumed to be outliers
+ or persons not truly working for pay).
+\end_layout
+
+\begin_layout Standard
+Income variables are top-coded.
+ As discussed in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Bowlus:2012"
+
+\end_inset
+
+, the frequency of top-coding and the top-coded amounts vary substantially
+ over time.
+ In addition, top-coding flags contain obvious errors.
+ In most years, fewer than 2% of labor earnings observations appear to be
+ top-coded.
+ Following 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Bowlus:2012"
+
+\end_inset
+
+, I prefer to use median rather than mean log wages to avoid this problem.
+ When using mean log wages, I follow 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "AutorKK2008"
+
+\end_inset
+
+ and replace top-coded incomes with 1.5 times their top-coded values.
+\end_layout
+
+\begin_layout Standard
+See 
+\family typewriter
+var_cpsearn.wage_create
+\family default
+.
+\end_layout
+
+\begin_layout Paragraph
+Weights:
+\end_layout
+
+\begin_layout Standard
+Observations are weighted by WTSUPP which excludes the armed forces and
+ the Hispanic oversample.
+\end_layout
+
+\begin_layout Paragraph
+Work status:
+\end_layout
+
+\begin_layout Standard
+Individuals who report working for wages (CLASSWKR) are classified as wage
+ earners.
+\end_layout
+
+\begin_layout Section
+Aggregate Statistics
+\end_layout
+
+\begin_layout Standard
+All aggregate statistics are computed for the full sample and the wage sample.
+ For each [age, school, year, sample] cell, I compute (
+\family typewriter
+aggr_cpsearn.age_school_year_stats
+\family default
+):
+\end_layout
+
+\begin_layout Enumerate
+number of observations
+\end_layout
+
+\begin_layout Enumerate
+mass
+\end_layout
+
+\begin_layout Enumerate
+for earnings and wages: median, mean log
+\end_layout
+
+\begin_layout Enumerate
+mean weeks worked
+\end_layout
+
+\begin_layout Enumerate
+mean years of schooling.
+\end_layout
+
+\begin_layout Standard
+I compute similar statistics (
+\family typewriter
+aggr_cpsearn.aggr_stats
+\family default
+)
+\end_layout
+
+\begin_layout Enumerate
+by [schooling, year], pooling a fixed age range
+\end_layout
+
+\begin_layout Enumerate
+by [age range, schooling, year].
+ This is mainly for computing the college wage premium for young and old
+ workers as in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "CardLemieux2001"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Cohort Lifetime Earnings
+\end_layout
+
+\begin_layout Standard
+For each [schooling, cohort] cell, I compute the present value of lifetime
+ earnings over a fixed age range (that depends on schooling) (
+\family typewriter
+profiles_cpsearn.cohort_earn_profiles
+\family default
+).
+\end_layout
+
+\begin_layout Standard
+Since full age profiles are not observed for most cohorts, some imputation
+ is needed.
+ This involves the following steps:
+\end_layout
+
+\begin_layout Enumerate
+Regress log median wages on time dummies and age dummies.
+\end_layout
+
+\begin_layout Enumerate
+Smooth each cohort's observed age-wage profiles using a Lowess filter.
+\end_layout
+
+\begin_layout Enumerate
+Linearly interpolate interior missing values (these are rare and typically
+ due to small numbers of observations in some cells).
+\end_layout
+
+\begin_layout Enumerate
+Impute missing observations at the start or at the end of the cohort's career
+ using the estimated age-wage profile.
+ This is scaled to match the mean of 5 overlapping periods.
+\end_layout
+
+\begin_layout Section
+Code Documentation
+\end_layout
+
+\begin_layout Standard
+Much of the code documention exists as program comments.
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+run_all_cpsearn
+\family default
+ runs all routines in sequence.
+ As inputs, this expects:
+\end_layout
+
+\begin_layout Enumerate
+CPS data files and code to load / recode them.
+\end_layout
+
+\begin_layout Enumerate
+A 
+\family typewriter
+filterCpsearn
+\family default
+ object that specifies sample selection rules.
+\end_layout
+
+\begin_layout Enumerate
+A 
+\family typewriter
+profile
+\family default
+ object that specifies how cohort wage profiles are to be constructed.
+\end_layout
+
+\begin_layout Enumerate
+The program directory and some general purpose code need to be on the Matlab
+ path.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "/Users/lutz/Documents/econ/References"
+options "econometrica"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
